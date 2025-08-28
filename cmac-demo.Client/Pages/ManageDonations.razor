@@ -1,0 +1,22 @@
+﻿@using Radzen
+@using Radzen.Blazor
+@using cmac.demo.Client.Components
+
+@page "/manage-donations"
+@layout cmac.demo.Client.Shared.FrameLayout
+
+@rendermode InteractiveWebAssembly
+
+<PageTitle>Manage Donations - Save the Cars</PageTitle>
+
+<h5>Add donations:</h5>
+
+<div class="donation-form-container">
+    <DonationForm OnDonationAdded="async () => await DonationList?.RefreshDonationsAsync()" />
+</div>
+
+<h5>Manage Donations:</h5>
+
+<div class="donation-list-container">
+    <DonationList @ref="DonationList" />
+</div>

@@ -1,0 +1,63 @@
+﻿@using cmac.demo.viewmodels
+
+<RadzenTemplateForm Data="@Donation" Submit="@HandleSubmit" TItem="DonationVm" FormName="DonationForm">
+
+<RadzenRow Gap="1rem">
+    <RadzenColumn Size="12" SizeSM="6">
+        <RadzenStack>
+            <RadzenFormField Text="Donation Date" Variant="Variant.Outlined">
+                <ChildContent>
+                    <RadzenDatePicker Name="DonationDate" @bind-Value="Donation.DonationDate" ShowTime="@false" Max="DateTime.Now.Date"  />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="DonationDate" Text="A valid date must be selected." Style="color: red;" />
+                </Helper>
+            </RadzenFormField>
+            <RadzenFormField Text="Donation Amount (£)" Variant="Variant.Outlined">
+                <ChildContent>
+                    <RadzenNumeric Name="Amount" @bind-Value="Donation.Amount" Culture="@(new System.Globalization.CultureInfo("en-GB"))" Format="c" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="Amount" Text="Amount is required" Style="color: red;" />
+                    <RadzenNumericRangeValidator Component="Amount" Min="0.01" Max="@(decimal.MaxValue)" Text="Amount must be greater than £0.00" Style="color: red;" />
+                </Helper>
+            </RadzenFormField>
+            <RadzenFormField Text="Payment Method" Variant="Variant.Outlined">
+                <ChildContent>
+                    <RadzenDropDown Name="PaymentMethod" Data="@paymentMethods" @bind-Value="Donation.PaymentMethod" AllowClear="@true" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="PaymentMethod" Text="Payment Method is required" Style="color: red;" />
+                </Helper>
+            </RadzenFormField>
+
+            @if (Donation.PaymentMethod == PaymentMethods.Other)
+            {
+                <RadzenFormField Text="Other Payment Method" Variant="Variant.Outlined">
+                    <ChildContent>
+                        <RadzenTextBox Name="OtherPaymentMethod" @bind-Value="Donation.OtherPaymentMethod" />
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="OtherPaymentMethod" Text="Other Payment Method details are required" Style="color: red;" />
+                    </Helper>
+                </RadzenFormField>
+            }
+
+            <RadzenCard Style="overflow: hidden">
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Notes</RadzenText>
+                <RadzenTextArea Name="Notes" @bind-Value="@Donation.Notes" Placeholder="Enter here..." aria-label="Donation Notes" />
+            </RadzenCard>
+
+        </RadzenStack>
+    </RadzenColumn>
+</RadzenRow>
+<RadzenRow Gap="1rem">
+    <RadzenColumn Size="12" SizeSM="6">
+        <RadzenStack Orientation="Orientation.Horizontal">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Add Donation" Style="margin-top: 10px;" />
+                <RadzenButton ButtonType="ButtonType.Button" Text="Clear" Click="@ClearForm" Style="margin-top: 10px;" />
+        </RadzenStack>
+    </RadzenColumn>
+</RadzenRow>
+
+</RadzenTemplateForm>

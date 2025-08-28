@@ -1,0 +1,35 @@
+﻿@using cmac.demo.viewmodels
+
+<RadzenTextBox @bind-Value="searchTerm" Placeholder="Search donations..." Style="margin-bottom: 10px;" Change="@OnSearchAsync" />
+
+<RadzenDataGrid style="height: 335px" @ref="Grid" IsLoading=@IsLoading Count="@RecordCount" Data="@Donations" TItem="DonationListItemVm" AllowSorting="true" AllowFiltering="true" AllowPaging="true" PageSize="15" PagerHorizontalAlign="HorizontalAlign.Center" ColumnWidth="200px">
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(DonationListItemVm.Id)" Filterable="false" Title="ID" Frozen="true" Visible="@false" />
+        <RadzenDataGridColumn Property="@nameof(DonationListItemVm.DonationDate)" Title="Date" Frozen="true" Width="160px" SortOrder="SortOrder.Descending">
+            <Template Context="donation">
+                @donation.DonationDate.ToString("dd/MM/yyyy")
+            </Template>
+            <FooterTemplate>
+                <div style="padding: 10px; font-weight: bold;">
+                    Donation Count: @Grid?.View.Count()
+                </div>
+            </FooterTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(DonationListItemVm.Amount)" Title="Amount" Width="160px">
+            <Template Context="donation">
+                @donation.Amount.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-GB"))
+            </Template>
+            <FooterTemplate>
+                <b>Total Donations (£): @Grid?.View.Sum(d => d.Amount).ToString("C")</b>
+            </FooterTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Method"
+                                FilterProperty="@nameof(DonationListItemVm.PaymentMethod.Name)"
+                                SortProperty="@nameof(DonationListItemVm.PaymentMethod.Name)">
+            <Template Context="donation">
+                @donation.PaymentMethod.Name
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(DonationListItemVm.Notes)" Title="Notes" Width="120px" />
+    </Columns>
+</RadzenDataGrid>
